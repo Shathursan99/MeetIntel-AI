@@ -11,7 +11,7 @@ pipe = pipeline("automatic-speech-recognition", model="openai/whisper-small")
 print("Model loaded successfully!")
 print("Transcribing audio..")
 
-result = pipe("test_audio.wav")
+result = pipe("test_audio2.mp3")
 
 print("\nTranscription:")
 print(result["text"])
