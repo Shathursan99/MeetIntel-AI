@@ -1,6 +1,16 @@
-from service import SpeechToTextService
+from app.ai.speech_to_text.service import SpeechToTextService
 
 stt_service = SpeechToTextService()
 print("starting transcription...")
-text = stt_service.trnscribe("test_audio2.mp3")
-print(f"Transcribed text: {text}")
+result = stt_service.transcribe("app/ai/diarization/test_audio2.wav")
+print("\nFull transcription:")
+print(result["text"])
+
+print("\nTimestamped chunks:")
+
+for chunk in result["chunks"]:
+    print(
+        chunk["timestamp"],
+        "->",
+        chunk["text"]
+    )

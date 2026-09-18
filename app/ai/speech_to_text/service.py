@@ -13,5 +13,8 @@ class SpeechToTextService:
     
     def transcribe(self, audio_path: str)-> str:
         print("Transcribing audio..")
-        result = self.pipe(audio_path)
-        return result["text"]
+        result = self.pipe(
+            audio_path,
+            return_timestamps=True
+        )
+        return result
