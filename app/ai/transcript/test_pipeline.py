@@ -1,6 +1,7 @@
 from app.ai.speech_to_text.service import SpeechToTextService
 from app.ai.diarization.service import DiarizationService
 from app.ai.transcript.merger import merge_transcript_with_speakers
+from app.ai.analysis.service import AnalysisService
 import time
 
 # audio_file = "app/ai/transcript/test_normalized.wav"
@@ -41,13 +42,21 @@ result = merge_transcript_with_speakers(
     whisper_chunks,
     speaker_segments
 )
+# 4.1 Create a speaker transcript
+speaker_transcript = "\n".join(
+    f"{segment['speaker']}: {segment['text']}"
+    for segment in result
+)
 
+print("\nSpeaker Transcript:\n")
+print(speaker_transcript)
 
-# 5. Display final transcript
-print("\nFinal Speaker Transcript:\n")
+# 5. Gemini analysis
+print("\nAnalyzing meeting...")
 
-for segment in result:
-    print(
-        f"[{segment['start']:.1f}s - {segment['end']:.1f}s] "
-        f"{segment['speaker']}: {segment['text']}"
-    )
+analysis_service = AnalysisService()
+
+analysis = analysis_service.analyze(speaker_transcript)
+
+print("\nMeeting Analysis:\n")
+print(analysis.model_dump_json(indent=2))
