@@ -1,0 +1,147 @@
+# MeetIntel - AI Meeting & Interview Analyzer
+
+MeetIntel is an AI-powered meeting and interview analysis platform that converts audio conversations into structured, searchable insights.
+
+The project combines speech recognition, speaker diarization, LLM-based analysis, and Retrieval-Augmented Generation (RAG) to go beyond basic transcription.
+
+## Core Pipeline
+
+```text
+Meeting Audio
+     ↓
+Whisper - Speech-to-Text
+     ↓
+Pyannote - Speaker Diarization
+     ↓
+Transcript Merger
+     ↓
+Speaker-Labeled Transcript
+     ↓
+Gemini - Structured AI Analysis
+     ↓
+Summary • Key Points • Decisions • Action Items
+```
+
+## Current Features
+
+- Audio upload through FastAPI
+- Speech-to-text transcription with timestamps
+- Speaker diarization
+- Speaker-labeled transcript generation
+- AI-generated meeting summary
+- Key-point extraction
+- Decision extraction
+- Action-item extraction with assignees and deadlines
+- Structured JSON responses using Pydantic
+- Retry handling for temporary LLM service failures
+- REST API for end-to-end meeting analysis
+
+## RAG Pipeline - In Progress
+
+The next stage adds question answering over meeting content.
+
+```text
+User Question
+     ↓
+BAAI/bge-m3 Embedding
+     ↓
+Vector Similarity Search
+     ↓
+Relevant Transcript Chunks
+     ↓
+Gemini + Retrieved Context
+     ↓
+Grounded Answer
+```
+
+Planned RAG capabilities include questions such as:
+
+- What deadline did we agree on?
+- What decisions were made?
+- What tasks were assigned?
+- What did a specific speaker say about a topic?
+
+## Tech Stack
+
+**Backend:** Python, FastAPI, Pydantic  
+**Speech-to-Text:** Hugging Face Transformers, OpenAI Whisper  
+**Speaker Diarization:** Pyannote Audio  
+**LLM Analysis:** Google Gemini  
+**Embeddings:** BAAI/bge-m3 / Sentence Transformers  
+**Database & Vector Search:** PostgreSQL + pgvector  
+**Audio Processing:** FFmpeg
+
+## API
+
+### Analyze a Meeting
+
+```http
+POST /api/v1/meetings/analyze
+```
+
+The endpoint accepts an audio file and processes it through the complete meeting-analysis pipeline.
+
+
+
+## Project Structure
+
+```text
+app/
+├── ai/
+│   ├── speech_to_text/
+│   ├── diarization/
+│   ├── transcript/
+│   ├── analysis/
+│   ├── embeddings/
+│   └── meeting_pipeline/
+├── api/
+│   └── v1/
+│       ├── router.py
+│       ├── transcription.py
+│       └── meeting.py
+└── main.py
+```
+
+## Architecture
+
+MeetIntel separates individual AI responsibilities into reusable services:
+
+- **SpeechToTextService** - converts audio to timestamped text.
+- **DiarizationService** - detects speaker segments.
+- **Transcript Merger** - associates transcription chunks with speakers.
+- **AnalysisService** - extracts structured meeting insights with an LLM.
+- **MeetingPipelineService** - coordinates the complete AI workflow.
+- **Embedding/RAG layer** - enables semantic retrieval and meeting Q&A (in progress).
+
+## Running the Backend
+
+Create and activate a Python virtual environment, install the project dependencies, and configure the required environment variables.
+
+
+
+Start the FastAPI development server:
+
+```bash
+uvicorn app.main:app --reload
+```
+
+Then open the interactive API documentation at:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+
+
+## Goal
+
+MeetIntel is being developed as a production-oriented AI engineering project to explore how speech AI, LLMs, structured outputs, semantic search, RAG, APIs, and full-stack development can be combined into one practical application.
+
+---
+
+**Status:** Active development
+"""
+
+out = "/mnt/data/README.md"
+pypandoc.convert_text(readme, 'md', format='md', outputfile=out, extra_args=['--standalone'])
+print(out)
